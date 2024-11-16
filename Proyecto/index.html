@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <title>
+      Mapa del Departamento de León, Nicaragua - Francisco De Jesús Meléndez
+      Simplina
+    </title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Mapa del Departamento de León, Nicaragua</h1>
+    </header>
+    <main>
+      <div class="contenedor_mapa">
+        <div id="map"></div>
+        <img class="norte" src="./public/Norte.png" alt="Imagen del norte" />
+        <section class="legend">
+          <h4>Leyenda</h4>
+          <div>
+            <i
+              style="
+                background: #ff0000;
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                border: 1px solid #000;
+              "
+            ></i>
+            Límites Municipales
+          </div>
+        </section>
+      </div>
+      <div class="info">
+        <section>
+          <p><strong>Autor: </strong>Francisco De Jesús Meléndez Simplina</p>
+          <p>León, 15 de Noviembre del 2024</p>
+          <p>Sistema de coordenadas WGS 1984 UTM zona 16 N</p>
+          <p>
+            <strong>Fuente de datos: </strong> Capas de cartografía de INETER
+            Mapa base de OpenStreetmap
+          </p>
+        </section>
+        <div id="small_map"></div>
+      </div>
+    </main>
+  </body>
+  <script src="index.js"></script>
+  <script></script>
+</html>

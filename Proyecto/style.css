@@ -26,6 +26,13 @@ main {
   z-index: 0;
 }
 
+#map2 {
+  z-index: 1;
+  height: 30%;
+  width: 100%;
+  border: #000 1px solid;
+}
+
 .norte {
   position: absolute;
   top: 0;
@@ -41,16 +48,17 @@ main {
 }
 
 .info section {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  justify-content: space-around;
 }
 
 .legend {
   position: absolute;
   width: 250px;
-  bottom: 20px;
-  right: 20px;
+  bottom: 5px;
+  left: 5px;
   z-index: 1000;
   background: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
   padding: 10px;

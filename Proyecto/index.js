@@ -7,6 +7,7 @@
 
 // Inicializar el mapa
 var map = L.map("map").setView([12.565287, -86.64917], 9);
+var map2 = L.map("map2").setView([12.565287, -86.64917], 6);
 
 function getColor(d) {
   return d > 50000
@@ -37,12 +38,26 @@ function style(feature) {
   };
 }
 
+// Estilos del map 2
+const myStyle = {
+  color: "#FF0000",
+  weight: 3,
+  opacity: 1,
+};
+
 // Añadir el mapa base
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 20,
   attribution:
     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
+
+// Añadir el mapa base 2
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 7,
+  attribution:
+    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+}).addTo(map2);
 
 // Importar el archivo JSON
 fetch("./layers/LEON.json")
@@ -72,7 +87,31 @@ fetch("./layers/LEON.json")
       },
       style: style,
     }).addTo(map);
+
+    // Añadir las capas al mapa 2 (si es GeoJSON)
+    L.geoJSON(JSON_LEON, {
+      style: myStyle,
+    }).addTo(map2);
   })
   .catch((error) => {
     console.error("Error:", error);
   });
+
+// Añadir el control de escala al mapa y guardar la referencia
+const controlEscala = L.control.scale().addTo(map);
+
+// Obtener el elemento HTML donde se mostrará la escala
+const escalaElemento = document.querySelector(".escala");
+
+const escalaMetrica = document.querySelector(".leaflet-control-scale-line");
+
+// Función para actualizar la escala al span cuando se haga zoom en el mapa
+function actualizarEscalaDesdeLeaflet() {
+  escalaElemento.textContent = escalaMetrica.textContent;
+}
+
+// Escuchar el evento 'zoomend' para actualizar la escala cuando cambia el zoom
+map.on("zoomend", actualizarEscalaDesdeLeaflet);
+
+// Actualizar inicialmente
+actualizarEscalaDesdeLeaflet();

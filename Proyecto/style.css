@@ -36,10 +36,10 @@ main {
 .norte {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   padding: 5px;
   z-index: 1;
-  width: 80px;
+  width: 65px;
 }
 
 .info {
@@ -56,11 +56,11 @@ main {
 
 .legend {
   position: absolute;
-  width: 250px;
+  width: 200px;
   bottom: 5px;
-  left: 5px;
+  right: 5px;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+  background: rgba(255, 255, 255);
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -87,4 +87,14 @@ main {
   width: 18px;
   height: 18px;
   border: 1px solid #000;
+}
+
+.leaflet-control-scale,
+.leaflet-control-zoom {
+  display: none;
+}
+
+.circulo {
+  border-radius: 999px;
+  background-color: red;
 }

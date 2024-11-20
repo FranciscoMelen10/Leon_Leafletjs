@@ -6,9 +6,10 @@
 */
 
 // Inicializar el mapa
-var map = L.map("map").setView([12.565287, -86.64917], 9);
-var map2 = L.map("map2").setView([12.565287, -86.64917], 6);
+var map = L.map("map").setView([12.559255, -86.671143], 9);
+var map2 = L.map("map2").setView([12.559255, -86.671143], 9);
 
+// Función para obtener colores del coropleta
 function getColor(d) {
   return d > 50000
     ? "#1a1a1d"
@@ -27,7 +28,7 @@ function getColor(d) {
     : "#f7f7f7";
 }
 
-// Estilos del GeoJSON
+// Estilos del GeoJSON del coropleta
 function style(feature) {
   return {
     fillColor: getColor(feature.properties.Hombres),
@@ -38,41 +39,62 @@ function style(feature) {
   };
 }
 
-// Estilos del map 2
-const myStyle = {
-  color: "#FF0000",
-  weight: 3,
-  opacity: 1,
-};
+// Estilos del centroide
+function getColorCentroide(d) {
+  return d > 50000
+    ? 14
+    : d > 20000
+    ? 12
+    : d > 15000
+    ? 10
+    : d > 10000
+    ? 8
+    : d > 5000
+    ? 6
+    : d > 1000
+    ? 4
+    : d > 0
+    ? 2
+    : 1;
+}
 
-// Añadir el mapa base
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+// Estilos del GeoJSON del centroide
+function styleCentroide(feature) {
+  return {
+    fillColor: "#FF0000",
+    weight: getColorCentroide(feature.properties.Hombres),
+    opacity: 1,
+    color: "#FF0000",
+  };
+}
+
+// Capa base del mapa
+const mapaBase = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 20,
   attribution:
     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
-// Añadir el mapa base 2
+// Capa base del mapa 2
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 7,
   attribution:
     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map2);
 
-// Importar el archivo JSON
+// Inicializar el control de capas
+const controlCapas = L.control.layers({ Mapa: mapaBase }).addTo(map);
+
+// Variables para las capas
+let coropleta, centroide;
+
 fetch("./layers/LEON.json")
   .then((response) => {
-    if (!response.ok) {
-      throw new Error("Error al cargar el archivo JSON");
-    }
+    if (!response.ok) throw new Error("Error al cargar el archivo JSON");
     return response.json();
   })
   .then((data) => {
-    // Almacenar los datos
-    let JSON_LEON = data;
-
-    // Añadir las capas al mapa (si es GeoJSON)
-    L.geoJSON(JSON_LEON, {
+    coropleta = L.geoJSON(data, {
       onEachFeature: function (feature, layer) {
         layer.bindPopup(
           "<table style='border-collapse: collapse; width: 100%;'>" +
@@ -86,32 +108,54 @@ fetch("./layers/LEON.json")
         );
       },
       style: style,
-    }).addTo(map);
+    });
+    controlCapas.addOverlay(coropleta, "Coropleta"); // Añadir la capa al control de capas
+    coropleta.addTo(map); // Añadir por defecto al mapa
 
-    // Añadir las capas al mapa 2 (si es GeoJSON)
-    L.geoJSON(JSON_LEON, {
-      style: myStyle,
-    }).addTo(map2);
+    L.geoJSON(data).addTo(map2);
   })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+  .catch((error) => console.error("Error al cargar la coropleta:", error));
 
-// Añadir el control de escala al mapa y guardar la referencia
-const controlEscala = L.control.scale().addTo(map);
+fetch("./layers/LEON_CENTROIDES.json")
+  .then((response) => {
+    if (!response.ok) throw new Error("Error al cargar el archivo JSON");
+    return response.json();
+  })
+  .then((data) => {
+    centroide = L.geoJSON(data, {
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "<table style='border-collapse: collapse; width: 100%;'>" +
+            "<tr><td style='border: 1px solid black; padding: 4px; font-weight: 700;'>Departamento</td><td style='border: 1px solid black; padding: 4px;'>" +
+            feature.properties.Municipio +
+            "</td></tr>" +
+            "<tr><td style='border: 1px solid black; padding: 4px; font-weight: 700;'>Hombres</td><td style='border: 1px solid black; padding: 4px;'>" +
+            feature.properties.Hombres +
+            "</td></tr>" +
+            "</table>"
+        );
+      },
+      pointToLayer: function (feature, latlng) {
+        // Crear un círculo para cada punto
+        return L.circle(latlng);
+      },
+      style: styleCentroide,
+    });
+    // Añadir la capa al control de capas
+    controlCapas.addOverlay(centroide, "Centroide"); // Añadir la capa al control de capas
+    centroide.addTo(map); // Añadir por defecto al mapa
+  })
+  .catch((error) => console.error("Error al cargar los centroides:", error));
 
-// Obtener el elemento HTML donde se mostrará la escala
+// Añadir el control de escala al mapa
+L.control.scale().addTo(map);
+
+// Escuchar el evento 'zoomend' para actualizar la escala
 const escalaElemento = document.querySelector(".escala");
-
 const escalaMetrica = document.querySelector(".leaflet-control-scale-line");
 
-// Función para actualizar la escala al span cuando se haga zoom en el mapa
 function actualizarEscalaDesdeLeaflet() {
   escalaElemento.textContent = escalaMetrica.textContent;
 }
-
-// Escuchar el evento 'zoomend' para actualizar la escala cuando cambia el zoom
 map.on("zoomend", actualizarEscalaDesdeLeaflet);
-
-// Actualizar inicialmente
 actualizarEscalaDesdeLeaflet();

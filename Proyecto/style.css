@@ -54,7 +54,7 @@ main {
   justify-content: space-around;
 }
 
-.legend {
+.legend_centroide {
   position: absolute;
   width: 200px;
   bottom: 5px;
@@ -69,19 +69,41 @@ main {
   line-height: 1.5;
 }
 
-.legend h4 {
+.legend_coropleta {
+  position: absolute;
+  width: 200px;
+  bottom: 180px;
+  right: 5px;
+  z-index: 1000;
+  background: rgba(255, 255, 255);
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.legend_centroide h4,
+.legend_coropleta h4 {
   margin: 0 0 10px;
   font-size: 14px;
   font-weight: bold;
 }
 
-.legend div {
+.legend_centroide div,
+.legend_coropleta div {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
 }
 
-.legend i {
+.legend_centroide i {
+  background-color: #ff0000;
+}
+
+.legend_centroide i,
+.legend_coropleta i {
   margin-right: 8px;
   display: inline-block;
   width: 18px;

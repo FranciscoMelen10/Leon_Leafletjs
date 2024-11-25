@@ -11,51 +11,43 @@ var map2 = L.map("map2").setView([12.559255, -86.671143], 9);
 
 // Función para obtener colores del coropleta
 function getColor(d) {
-  return d > 50000
-    ? "#1a1a1d"
-    : d > 20000
-    ? "#6f2232"
-    : d > 15000
-    ? "#950740"
+  return d > 15000
+    ? "#b10303"
+    : d > 14000
+    ? "#ff2323"
     : d > 10000
-    ? "#c3073f"
+    ? "#ff5757"
     : d > 5000
-    ? "#ff5733"
-    : d > 1000
-    ? "#ffc300"
+    ? "#ff9494"
     : d > 0
-    ? "#daf7a6"
-    : "#f7f7f7";
+    ? "#fff"
+    : "#ffdddd";
 }
 
 // Estilos del GeoJSON del coropleta
 function style(feature) {
   return {
     fillColor: getColor(feature.properties.Hombres),
-    weight: 2,
+    weight: 1,
     opacity: 1,
-    color: "#FF0000",
-    fillOpacity: 0.7,
+    color: "#000",
+    fillOpacity: 0.8,
   };
 }
 
 // Estilos del centroide
 function getColorCentroide(d) {
-  return d > 50000
-    ? 14
-    : d > 20000
+  return d > 15000
+    ? 15
+    : d > 14000
     ? 12
-    : d > 15000
-    ? 10
     : d > 10000
-    ? 8
+    ? 10
     : d > 5000
-    ? 6
-    : d > 1000
-    ? 4
+    ? 8
     : d > 0
-    ? 2
-    : 1;
+    ? 4
+    : 0;
 }
 
 // Estilos del GeoJSON del centroide
